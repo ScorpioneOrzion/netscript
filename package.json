@@ -5,6 +5,7 @@
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"packageManager": "pnpm@9.7.1",
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
