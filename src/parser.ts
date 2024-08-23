@@ -1,40 +1,55 @@
-import tokenize from "./tokenizer";
-import engine from "./engine";
+import { Token } from "./tokenizer";
 
-const { declareConst, declareVariable } = engine()
+export default class parser<T> {
+	private tokenizer: (code: string) => Token<T>[];
+	private tokens: Token<T>[] = [];
+	private currentTokenIndex: number = 0;
 
-export function parse(tokens: ReturnType<typeof tokenize>) {
-	let i = 0;
-
-	function next() {
-		return tokens[i++];
+	constructor(tokenizer: (code: string) => Token<T>[]) {
+		this.tokenizer = tokenizer;
 	}
 
-	function parseVariableDeclaration() {
-		const keywordToken = next(); // let or const
-		const identifierToken = next(); // variable name
-		next(); // skip '='
-		const valueToken = next(); // the value
+	private getCurrentToken(): Token<T> | null {
+		return this.tokens[this.currentTokenIndex] || null;
+	}
 
-		if (keywordToken.type === 'LET') {
-			declareVariable(identifierToken.value, parseValue(valueToken));
-		} else if (keywordToken.type === 'CONST') {
-			declareConst(identifierToken.value, parseValue(valueToken));
+	private consumeToken(): Token<T> | null {
+		const token = this.getCurrentToken();
+		if (token) {
+			this.currentTokenIndex++;
 		}
+		return token;
 	}
 
-	function parseValue(token: typeof tokens[number]) {
-		if (token.type === 'NUMBER') return Number(token.value);
-		if (token.type === 'STRING') return token.value.slice(1, -1); // Strip quotes
-		// Add more cases for other types
+	private parseExpression() {
+		return this.parseAdditiveExpression();
 	}
 
-	while (i < tokens.length) {
-		const token = tokens[i];
-		if (token.type === 'LET' || token.type === 'CONST') {
-			parseVariableDeclaration();
+	private parseAdditiveExpression() {
+		let expr = this.parseMultiplicativeExpression();
+		return expr;
+	}
+
+	private parseMultiplicativeExpression() {
+		let expr = this.parsePrimary();
+		return expr;
+	}
+
+	private parsePrimary() {
+		const token = this.consumeToken();
+		if (token?.type === 'NUMBER') {
+		} else if (token?.type === 'IDENTIFIER') {
+		} else if (token?.type === 'SYMBOL' && token.value === '(') {
+		} else if (token?.type === 'OPERATOR' && token.value === '-') {
 		} else {
-			i++; // Skip over tokens we don't handle yet
 		}
+	}
+
+
+	public parse(code: string) {
+		this.tokens = this.tokenizer(code);
+		this.currentTokenIndex = 0;
+
+		return this.parseExpression();
 	}
 }
