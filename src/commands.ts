@@ -303,6 +303,7 @@ export default () => {
 		transpile(value: string | number) {
 			if (isNumber(value)) return value
 			for (const key in commandTable) {
+				if (value === key) return +key
 				if (value.toUpperCase() === commandTable[key].name.toUpperCase()) return +key
 			}
 			return -1
@@ -333,6 +334,10 @@ export default () => {
 				else console.error('Execution halted due to error:', error)
 				machine.exeStack.length = 0;
 			}
+		},
+		executeCode(...codes: unknown[]) {
+			this.machine.exeStack.push(...codes)
+			this.execute()
 		}
 	};
 };
