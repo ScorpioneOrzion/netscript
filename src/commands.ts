@@ -133,7 +133,7 @@ export default () => {
 				const b = machine.dataStack.pop();
 				if (isPropertyKey(a) && isPropertyKey(b)) {
 					const old = machine.memory[a].map(value => value)
-					old.every(value => machine.memory[b].push(value))
+					old.forEach(value => machine.memory[b].push(value))
 				} else throw new Error("Invalid Arguments")
 			}
 		},
@@ -395,8 +395,11 @@ export default () => {
 			}
 		},
 		executeCode(...codes: unknown[]) {
-			const old = codes
-			old.every(code => this.machine.exeStack.push(code))
+			const old = codes.map(value => {
+				const number = Number(value);
+				return isNaN(number) ? value : number;
+			});
+			old.forEach(code => this.machine.exeStack.push(code))
 			this.execute()
 		}
 	};
