@@ -395,7 +395,8 @@ export default () => {
 			}
 		},
 		executeCode(...codes: unknown[]) {
-			this.machine.exeStack.push(...codes)
+			const old = codes
+			old.every(code => this.machine.exeStack.push(code))
 			this.execute()
 		}
 	};
