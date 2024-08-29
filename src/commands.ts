@@ -398,7 +398,7 @@ export default () => {
 			const old = codes.map(value => {
 				const number = Number(value);
 				return isNaN(number) ? value : number;
-			});
+			}).reverse()
 			old.forEach(code => this.machine.exeStack.push(code))
 			this.execute()
 		}
