@@ -133,6 +133,7 @@ export default () => {
 				const b = machine.dataStack.pop();
 				if (isPropertyKey(a) && isPropertyKey(b)) {
 					const old = machine.memory[a].map(value => value)
+					if (!(b in machine.memory)) machine.memory[b] = []
 					old.forEach(value => machine.memory[b].push(value))
 				} else throw new Error("Invalid Arguments")
 			}
@@ -156,6 +157,19 @@ export default () => {
 				if (isPropertyKey(a))
 					delete machine.memory[a]
 				else throw new Error("Invalid Arguments")
+			}
+		},
+		[index[i++]]: {
+			name: 'GET_INDEX_COUNT',
+			execute() {
+				const location = machine.dataStack.pop();
+				if (isPropertyKey(location)) {
+					if (location in machine.memory)
+						machine.dataStack.push(machine.memory[location].length);
+					else machine.dataStack.push(0)
+				} else {
+					throw new Error("Invalid Arguments");
+				}
 			}
 		},
 		[index[i++]]: {
@@ -258,6 +272,15 @@ export default () => {
 						machine.exeStack.pop();
 					else throw new Error("Invalid Arguments")
 				}
+			}
+		},
+		[index[i++]]: {
+			name: 'SKIP',
+			execute() {
+				const a = machine.dataStack.pop();
+				if (isNumber(a)) for (let i = 0; i < a; i++)
+					machine.exeStack.pop();
+				else throw new Error("Invalid Arguments")
 			}
 		},
 		[index[i++]]: {
