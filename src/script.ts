@@ -58,25 +58,21 @@ export default () => {
 		}
 	}
 
-	let index = Array.from({ length: 1000 }, (_, i) => i);
-	shuffleArray(index);
-	let i = 0;
-
-	const commandTable: Record<number, CommandEntry> = {
-		[index[i++]]: {
+	const commands: CommandEntry[] = [
+		{
 			name: 'PUSH',
 			execute() {
 				const a = machine.exeStack.pop();
 				machine.dataStack.push(a)
 			},
 		},
-		[index[i++]]: {
+		{
 			name: 'POP',
 			execute() {
 				machine.dataStack.pop()
 			},
 		},
-		[index[i++]]: {
+		{
 			name: 'ADD',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -86,7 +82,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'SUB',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -96,7 +92,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'MUL',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -106,7 +102,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'DIV',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -116,7 +112,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'MOD',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -126,7 +122,7 @@ export default () => {
 				else throw new Error("Invalid Arguments");
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'COPY',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -138,7 +134,7 @@ export default () => {
 				} else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'SELECT',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -150,7 +146,7 @@ export default () => {
 				} else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CLEAR',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -159,7 +155,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'GET_INDEX_COUNT',
 			execute() {
 				const location = machine.dataStack.pop();
@@ -172,7 +168,7 @@ export default () => {
 				}
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CMP_EQ',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -180,7 +176,7 @@ export default () => {
 				machine.cpmVal = (a === b);
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CMP_NEQ',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -188,7 +184,7 @@ export default () => {
 				machine.cpmVal = (a !== b);
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CMP_L',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -198,7 +194,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CMP_LE',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -208,7 +204,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CMP_G',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -218,7 +214,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CMP_GE',
 			execute() {
 				const b = machine.dataStack.pop();
@@ -228,7 +224,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'IS_TRUE',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -237,7 +233,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'IS_FALSE',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -246,13 +242,13 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'GET_CMP',
 			execute() {
 				machine.dataStack.push(machine.cpmVal)
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'SKIP_IF_TRUE',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -263,7 +259,7 @@ export default () => {
 				}
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'SKIP_IF_FALSE',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -274,7 +270,7 @@ export default () => {
 				}
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'SKIP',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -283,7 +279,7 @@ export default () => {
 				else throw new Error("Invalid Arguments")
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'AND',
 			execute() {
 				const b = machine.dataStack.pop()
@@ -293,7 +289,7 @@ export default () => {
 				else throw new Error("Invalid Arguments");
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'OR',
 			execute() {
 				const b = machine.dataStack.pop()
@@ -303,7 +299,7 @@ export default () => {
 				else throw new Error("Invalid Arguments");
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'NOT',
 			execute() {
 				const a = machine.dataStack.pop()
@@ -312,7 +308,7 @@ export default () => {
 				else throw new Error("Invalid Arguments");
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CH_EXE',
 			execute() {
 				const a = machine.dataStack.pop()
@@ -320,7 +316,7 @@ export default () => {
 					machine.eStack = a;
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CH_DATA',
 			execute() {
 				const a = machine.dataStack.pop();
@@ -328,7 +324,7 @@ export default () => {
 					machine.dStack = a;
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'GET_TYPE',
 			execute() {
 				const topElement = machine.dataStack.pop();
@@ -336,7 +332,7 @@ export default () => {
 				machine.dataStack.push(type);
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'REMOVE_PROPERTY',
 			execute() {
 				const key = machine.dataStack.pop();
@@ -348,7 +344,7 @@ export default () => {
 				} else throw new Error("Invalid Arguments");
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'ADD_PROPERTY',
 			execute() {
 				const value = machine.dataStack.pop();
@@ -359,7 +355,7 @@ export default () => {
 				else throw new Error("Invalid Arguments");
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'GET_PROPERTY',
 			execute() {
 				const key = machine.dataStack.pop()
@@ -368,16 +364,46 @@ export default () => {
 					if (key in obj) machine.dataStack.push(obj[key as keyof typeof obj])
 					else machine.dataStack.push(undefined)
 				} else throw new Error(`Invalid Arguments`);
-
 			}
 		},
-		[index[i++]]: {
+		{
 			name: 'CREATE_OBJ',
 			execute() {
 				machine.dataStack.push({})
 			}
-		}
-	}
+		},
+		{
+			name: 'SAVE',
+			execute() {
+				const fileName = machine.dataStack.pop()
+				const fileData = machine.dataStack.pop()
+			}
+		},
+		{
+			name: 'LOAD',
+			execute() {
+				const fileName = machine.dataStack.pop()
+			}
+		},
+		{
+			name: 'CHANGE_DIRECTORY',
+			execute() { }
+		},
+		{
+			name: 'CONNECT',
+			execute() { }
+		},
+		{
+			name: 'SCAN',
+			execute() { }
+		},
+	]
+
+	let index = Array.from({ length: Math.min(commands.length * 1.5, 2147483647) | 0 }, (_, i) => i);
+	shuffleArray(index);
+	let i = 0;
+
+	const commandTable = Object.fromEntries(commands.map(item => [index[i++], item]))
 
 	return {
 		machine,

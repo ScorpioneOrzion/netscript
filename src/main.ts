@@ -1,3 +1,5 @@
-import commands from "./commands";
+import script from "./script";
 
-export default commands
+export default {
+	script
+}
